@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess My Number</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="day2.html">
+
+    <style>
+        body {
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+
+        .container {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        p {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            width: calc(100% - 22px);
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #playagain {
+            background-color: #28a745;
+            border-radius: 10px;
+        }
+
+        #playagain:hover {
+            background-color: #218838;
+        }
+
+        h2 {
+            font-size: 18px;
+            color: #333;
+            margin: 20px 0;
+        }
+
+        h3 {
+            font-size: 18px;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        .current-score,
+        .highest-score {
+            font-size: 16px;
+            margin: 10px 0;
+            color: #333;
+        }
+
+        .current-score span,
+        .highest-score span {
+            font-weight: bold;
+        }
+
+        .game-over {
+            color: white;
+            background-color: red;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>Hello!</strong> This Is All My JavaScript Assignment
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">JS Assignment</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavDarkDropdown" aria-controls="navbarNavDarkDropdown" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <button class="btn btn-dark dropdown-toggle" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                JS ASSIGNMENT
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-dark">
+                                <li> <a class="dropdown-item" href="index.html">Day 1</a></li>
+                                <li> <a class="dropdown-item" href="day2.html">Day 2</a></li>
+                                <li> <a class="dropdown-item" href="day3.html">Day 3</a></li>
+                                <li> <a class="dropdown-item" href="day4.html">Day 4</a></li>
+                                <li> <a class="dropdown-item" href="day5.html">Day 5</a></li>
+                                <li> <a class="dropdown-item" href="day6.html">Day 6</a></li>
+                                <li> <a class="dropdown-item" href="day7.html">Day 7</a></li>
+                                <li> <a class="dropdown-item" href="day8.html">Day 8</a></li>
+                                <li> <a class="dropdown-item" href="day9.html">Day 9</a></li>
+                                <li> <a class="dropdown-item" href="day10.html">Day 10</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </nav>
+
+
+        <div class="container">
+            <h1>Guess My Number</h1>
+            <p>Guess a number between 45 and 60</p>
+            <input type="text" id="myinput" placeholder="Guess a number" />
+            <button id="checkit">Check</button>
+            <button id="playagain" style="display: none">Play Again</button>
+            <h2 id="guessnow">Start guessing....</h2>
+            <h3 id="shownumber" style="display: none">The number is ??</h3>
+            <div class="current-score">
+                Current Score: <span id="currentscore"></span>
+            </div>
+            <div class="highest-score">
+                Highest Score:<span id="highestscore">0</span>
+            </div>
+        </div>
+
+
+        <script>
+            let guessnow = document.getElementById("guessnow");
+            let shownumber = document.getElementById("shownumber");
+            let btncheck = document.getElementById("checkit");
+            let btnplayagain = document.getElementById("playagain");
+            let highestscore = document.getElementById("highestscore");
+            let currentscore = document.getElementById("currentscore");
+
+            let secretNumber = Math.trunc(Math.random() * 16) + 45;
+            let score = 10;
+            let xscore = 0;
+
+            function scoreline() {
+                score -= 2;
+                currentscore.innerHTML = score;
+                if (score == 0) {
+                    guessnow.innerHTML = "Game Over";
+                    guessnow.style.color = "white";
+                    guessnow.style.backgroundColor = "red";
+                    guessnow.style.padding = "10px";
+                    guessnow.style.borderRadius = "12px";
+                    shownumber.innerHTML = `The number was actually ${secretNumber}`;
+                    shownumber.style.display = "block";
+                    btnplayagain.style.display = "inline-block";
+                }
+            }
+
+            function guesengine() {
+                let myGues = Number(document.getElementById("myinput").value);
+
+                if (isNaN(myGues)) {
+                    guessnow.innerHTML = "Invalid input";
+                    scoreline();
+                    document.getElementById("myinput").value = "";
+                    document.getElementById("myinput").focus();
+                } else if (myGues > secretNumber) {
+                    guessnow.innerHTML = "Your Guess is too high";
+                    guessnow.style.color = "red";
+                    scoreline();
+                    document.getElementById("myinput").value = "";
+                    document.getElementById("myinput").focus();
+                } else if (myGues < secretNumber) {
+                    guessnow.innerHTML = "Your Guess is too low";
+                    guessnow.style.color = "blue";
+                    scoreline();
+                    document.getElementById("myinput").value = "";
+                    document.getElementById("myinput").focus();
+                } else {
+                    guessnow.innerHTML = "Correct";
+                    guessnow.style.color = "white";
+                    guessnow.style.backgroundColor = "green";
+                    guessnow.style.padding = "10px";
+                    guessnow.style.borderRadius = "10px";
+                    guessnow.style.boxShadow = "0 4px 10px rgba(0, 255, 0, 0.5)";
+                    shownumber.innerHTML = `The number is ${secretNumber}`;
+                    shownumber.style.display = "block";
+                    btncheck.style.display = "none";
+                    btnplayagain.style.display = "inline-block";
+                    if (score > xscore) {
+                        xscore = score;
+                        highestscore.innerHTML = xscore;
+                    }
+                }
+            }
+
+            btncheck.addEventListener("click", guesengine);
+            btnplayagain.addEventListener("click", function () {
+                guessnow.innerHTML = `Start Guessing....`;
+                guessnow.style.color = "black";
+                guessnow.style.backgroundColor = "transparent";
+                guessnow.style.boxShadow = "none";
+                document.getElementById("myinput").value = "";
+                document.getElementById("myinput").focus();
+                btncheck.style.display = "inline-block";
+                btnplayagain.style.display = "none";
+                secretNumber = Math.trunc(Math.random() * 15) + 45;
+                score = 10;
+                currentscore.innerHTML = score;
+                shownumber.style.display = "none";
+            });
+        </script>
+
+        <br><br>
+
+        <footer style="width: 100%;  color: black; text-align: center;">
+            <p>© 2024 Praise Code | Valuemax JavaScript All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>
